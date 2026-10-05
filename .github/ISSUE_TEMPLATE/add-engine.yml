@@ -1,0 +1,111 @@
+name: Suggest an engine or tool
+description: Propose a FOSS game engine, framework, runtime, authoring tool, or specialized engine for OpenEngineAtlas
+title: "[Suggestion] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a project for **OpenEngineAtlas**.
+
+        Before submitting, please check that the project is not already listed and that its engine/tool source is released under a recognized free/open-source software license.
+
+  - type: input
+    id: name
+    attributes:
+      label: Project name
+      placeholder: Godot Engine
+    validations:
+      required: true
+
+  - type: input
+    id: website
+    attributes:
+      label: Official website
+      placeholder: https://example.org/
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Canonical source repository
+      placeholder: https://github.com/org/project
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License
+      description: Use the SPDX identifier when practical (for example MIT, GPL-3.0-or-later, Apache-2.0).
+      placeholder: MIT
+    validations:
+      required: true
+
+  - type: input
+    id: license_url
+    attributes:
+      label: Upstream license link
+      placeholder: https://github.com/org/project/blob/main/LICENSE
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Suggested category
+      options:
+        - General-purpose 2D + 3D
+        - 2D-focused
+        - 3D-focused
+        - Code-first framework/library
+        - Specialized
+        - Legacy/archived
+    validations:
+      required: true
+
+  - type: input
+    id: type
+    attributes:
+      label: Project type
+      description: "Examples: engine, framework, visual-novel engine, RTS engine, fantasy console, narrative middleware."
+      placeholder: engine
+    validations:
+      required: true
+
+  - type: input
+    id: dimensions
+    attributes:
+      label: Focus / dimensions
+      placeholder: 2D + 3D
+    validations:
+      required: true
+
+  - type: input
+    id: languages
+    attributes:
+      label: Main implementation or scripting languages
+      placeholder: C++ / Lua
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it belongs in OpenEngineAtlas
+      description: Briefly explain what makes the project useful and how it differs from similar entries.
+      placeholder: Describe the project in 2–5 sentences.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched the current list and did not find this project already included.
+          required: true
+        - label: The project source is publicly available under a recognized free/open-source software license.
+          required: true
+        - label: I used canonical upstream links rather than mirrors or third-party download sites.
+          required: true

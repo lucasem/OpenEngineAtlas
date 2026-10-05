@@ -1,0 +1,79 @@
+name: Suggestion triage
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  triage:
+    if: startsWith(github.event.issue.title, '[Suggestion]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply workflow labels and respond to decisions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.issue.number;
+
+            const labels = {
+              'suggestion': ['1d76db', 'Proposed project for the atlas'],
+              'needs-review': ['fbca04', 'Awaiting maintainer review'],
+              'accepted': ['0e8a16', 'Accepted for inclusion'],
+              'rejected': ['d93f0b', 'Does not meet current inclusion criteria'],
+              'needs-info': ['d4c5f9', 'More information is required'],
+              'duplicate': ['cfd3d7', 'Duplicate suggestion or entry'],
+              'legacy': ['5319e7', 'Legacy or archived project'],
+              'license-question': ['b60205', 'License requires additional review']
+            };
+
+            for (const [name, [color, description]] of Object.entries(labels)) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({ owner, repo, name, color, description });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            if (context.payload.action === 'opened') {
+              await github.rest.issues.addLabels({
+                owner, repo, issue_number,
+                labels: ['suggestion', 'needs-review']
+              });
+              return;
+            }
+
+            const label = context.payload.label?.name;
+            if (!['accepted', 'rejected'].includes(label)) return;
+
+            try {
+              await github.rest.issues.removeLabel({ owner, repo, issue_number, name: 'needs-review' });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            if (label === 'accepted') {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number,
+                body: [
+                  'This suggestion has been **accepted** for OpenEngineAtlas.',
+                  '',
+                  'A pull request is welcome. Add the project to `data/engines.json`, run the validator and README generator, and use `Closes #' + issue_number + '` in the PR body so this issue closes automatically when the PR is merged.'
+                ].join('\n')
+              });
+            }
+
+            if (label === 'rejected') {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number,
+                body: 'This suggestion has been marked **rejected** under the current OpenEngineAtlas inclusion criteria. A maintainer can add the specific reason in a follow-up comment before closing the issue.'
+              });
+            }

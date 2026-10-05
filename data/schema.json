@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FOSS Game Engines Dataset",
+  "type": "object",
+  "required": [
+    "title",
+    "last_verified",
+    "criteria",
+    "engines"
+  ],
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "last_verified": {
+      "type": "string",
+      "format": "date"
+    },
+    "criteria": {
+      "type": "string"
+    },
+    "engines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "category",
+          "dimensions",
+          "languages",
+          "license",
+          "name",
+          "notes",
+          "source",
+          "type",
+          "website",
+          "workflow"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "2d-focused",
+              "3d-focused",
+              "frameworks",
+              "general-2d-3d",
+              "legacy",
+              "specialized"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "dimensions": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "workflow": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "source": {
+            "type": "string",
+            "format": "uri"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
